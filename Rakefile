@@ -39,7 +39,7 @@ Rake::RDocTask.new do |rdoc|
   rdoc.options << '--line-numbers' << '--inline-source' << '-A cattr_accessor=object'
   rdoc.options << '--charset' << 'utf-8'
   rdoc.template = ENV['template'] ? "#{ENV['template']}.rb" : '../doc/template/horo'
-  rdoc.rdoc_files.include("#{dir}/README", "#{dir}/CHANGES")
+  rdoc.rdoc_files.include("#{dir}/README.rdoc", "#{dir}/CHANGES")
   rdoc.rdoc_files.include("#{dir}/lib/**/*.rb")
 end
 
