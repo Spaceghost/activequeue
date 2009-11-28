@@ -1,0 +1,62 @@
+= ActiveQueue
+
+ActiveQueue provides a standard interface for sending messages to and 
+receiving messages from message queues.
+
+The following adapters are included:
+
+* MemoryAdapter for a simple in-memory queue.
+* BeanstalkAdapter to communicate with one or more beanstalkd servers.
+
+
+== Usage Inside Rails
+
+
+When using ActiveQueue inside of Rails you can set up a configuration file 
+in config/queue.yml like this:
+
+  development:
+    adapter: memory
+  
+  production:
+    adapter: beanstalk
+    
+And then you can get access to a named queue from the QueueProvider class:
+
+  queue = ActiveQueue::QueueProvider.queue('my_queue')
+  queue.send(message)
+  
+Receiving messages works the same way:
+
+  queue = ActiveQueue::QueueProvider.queue('my_queue')
+  queue.receive(message)
+
+== Usage Outside of Rails
+
+A simple usage of the memory queue, outside of Rails, might look like this:
+
+  require 'active_queue'
+  queue = ActiveQueue::QueueProvider.queue('my_queue')
+  queue.send(message)
+  
+  # another process
+  message = queue.recieve
+  
+If you want to use a particular queue adapter:
+
+  require 'active_queue'
+  ActiveQueue::QueueProvider.initialize_adapter('beanstalk')
+  queue.send(message)
+  
+  # another process
+  message = queue.recieve
+  
+You can also specify configuration information for the adapter:
+
+  require 'active_queue'
+  configuration = {:hosts => ['192.168.1.1:11300','192.168.1.2:11300']}
+  ActiveQueue::QueueProvider.initialize_adapter('beanstalk', configuration)
+  queue.send(message)
+  
+  # another process
+  message = queue.recieve
